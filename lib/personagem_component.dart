@@ -59,7 +59,7 @@ mixin class PersonagemComponent {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         IconButton(
-          icon: const Icon(Icons.bedtime),
+          icon: const Icon(Icons.brightness_4),
           onPressed: () => ThemeController().switchTheme(),
         ),
       ],
@@ -123,7 +123,10 @@ mixin class PersonagemComponent {
                           item['status'] == 'alive' ? Colors.green : Colors.red,
                     ),
                     const SizedBox(width: 5),
-                    Text('${item['status']} - ${item['species']}'),
+                    Text(
+                      '${item['status']} - ${item['species']} (${item['gender']})',
+                    ),
+                    if (item.type.isNotEmpty) Text('Tipo: ${item.type}'),
                   ],
                 ),
               ],

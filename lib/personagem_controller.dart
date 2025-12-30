@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:rick_morty_app/personagem_model.dart';
 
 class PersonagemController extends GetxController {
   late BuildContext context;
 
-  final RxList<Map<String, String>> personagens =
-      <Map<String, String>>[
-        {
-          'name': 'Rick Sanchez',
-          'status': 'alive',
-          'image': 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-          'species': 'human',
-        },
-        {
-          'name': 'Morty Smith',
-          'status': 'alive',
-          'image': 'https://rickandmortyapi.com/api/character/avatar/2.jpeg',
-          'species': 'human',
-        },
-        {
-          'name': 'Summer Smith',
-          'status': 'alive',
-          'image': 'https://rickandmortyapi.com/api/character/avatar/3.jpeg',
-          'species': 'human',
-        },
-      ].obs;
+  final isLoading = true.obs;
+
+  final personagens = <PersonagemModel>[].obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchPersonagens();
+  }
+
+  buscaPersonagem() async {
+    Uri url = Uri.parse('https://rickandmortyapi.com/api/character');
+
+    http.Response response;
+
+    response = await http.get(url);
+  }
 }
