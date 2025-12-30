@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rick_morty_app/personagem_controller.dart';
+import 'package:rick_morty_app/theme_controller.dart';
 
 mixin class PersonagemComponent {
   final PersonagemController controller = PersonagemController();
@@ -15,12 +16,7 @@ mixin class PersonagemComponent {
     return SafeArea(
       child: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            SizedBox(height: orientacao == Orientation.portrait ? 10 : 5),
-            logo(),
-          ],
-        ),
+        child: Column(children: [mudarTema(), logo()]),
       ),
     );
   }
@@ -33,6 +29,18 @@ mixin class PersonagemComponent {
         width: orientacao == Orientation.portrait ? 300 : 200,
         height: orientacao == Orientation.portrait ? 300 : 200,
       ),
+    );
+  }
+
+  Widget mudarTema() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.bedtime),
+          onPressed: () => ThemeController().switchTheme(),
+        ),
+      ],
     );
   }
 }
