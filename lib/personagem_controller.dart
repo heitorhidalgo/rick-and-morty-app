@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -8,7 +10,7 @@ class PersonagemController extends GetxController {
 
   final isLoading = true.obs;
 
-  final personagens = <PersonagemModel>[].obs;
+  RxList personagens = <PersonagemModel>[].obs;
 
   @override
   void onInit() {
@@ -16,11 +18,40 @@ class PersonagemController extends GetxController {
     fetchPersonagens();
   }
 
-  buscaPersonagem() async {
-    Uri url = Uri.parse('https://rickandmortyapi.com/api/character');
+  Future<void> fetchPersonagens() async {
+    try {
+      isLoading.value = true;
 
-    http.Response response;
+      final Uri url = Uri.parse('https://rickandmortyapi.com/api/character');
+      final response = await http.get(url);
 
-    response = await http.get(url);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> retorno = json.decode(response.body);
+
+        final List<dynamic> listaResultados = retorno['results'];
+
+        personagens.value =
+            listaResultados
+                .map((item) => PersonagemModel.fromJson(item))
+                .toList();
+      } else {
+        Get.snackbar(
+          'Erro',
+          'Falha ao buscar dados: ${response.statusCode}',
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      print('Erro no controller: $e');
+      Get.snackbar(
+        'Erro',
+        'Verifique a conexão: $e',
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

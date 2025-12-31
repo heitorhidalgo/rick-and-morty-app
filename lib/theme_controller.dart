@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class ThemeController {
-  final _box = GetStorage();
+  final _box = GetStorage(); //Manter o modo selecionado, mesmo após sair do app
   final _key = 'isDarkMode';
 
   bool _loadThemeFromBox() => _box.read(_key) ?? false;

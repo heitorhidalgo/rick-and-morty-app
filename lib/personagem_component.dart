@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rick_morty_app/personagem_controller.dart';
+import 'package:rick_morty_app/personagem_model.dart';
 import 'package:rick_morty_app/theme_controller.dart';
 
 mixin class PersonagemComponent {
   final PersonagemController controller = Get.put(PersonagemController());
+  PersonagemModel? personagem;
 
   late Orientation orientacao;
 
@@ -26,17 +28,33 @@ mixin class PersonagemComponent {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
+
           Expanded(
-            child: Obx(
-              () => ListView.builder(
+            child: Obx(() {
+              //Deixando observável com o GetX
+              //Carregando a lista
+              if (controller.isLoading.value) {
+                return const Center(
+                  child: CircularProgressIndicator(color: Colors.green),
+                );
+              }
+              //Quando a lista estiver vazia
+              if (controller.personagens.isEmpty) {
+                return const Center(
+                  child: Text('Nenhum personagem encontrado'),
+                );
+              }
+              //Mostra a lista no caso de sucesso
+              return ListView.builder(
                 physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.only(bottom: 20),
                 itemCount: controller.personagens.length,
                 itemBuilder: (context, index) {
                   final item = controller.personagens[index];
                   return cardPersonagem(item);
                 },
-              ),
-            ),
+              );
+            }),
           ),
         ],
       ),
@@ -47,6 +65,7 @@ mixin class PersonagemComponent {
     return Center(
       heightFactor: 1,
       child: Image.asset(
+        //Sempre que colocar alguma imagem, ir no pubspec.yaml e alterar o assets, colocando o caminho correto
         'assets/images/logo.png',
         width: orientacao == Orientation.portrait ? 300 : 180,
         height: orientacao == Orientation.portrait ? 300 : 180,
@@ -54,6 +73,7 @@ mixin class PersonagemComponent {
     );
   }
 
+  //Widget para alterar tema, criado junto com a theme_controller
   Widget mudarTema() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -66,74 +86,101 @@ mixin class PersonagemComponent {
     );
   }
 
-  Widget cardPersonagem(Map<String, String> item) {
+  // Design do card de personagem
+  Widget cardPersonagem(PersonagemModel item) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-      elevation: 4,
+      margin: const EdgeInsets.all(10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(15),
-              bottomLeft: Radius.circular(15),
-            ),
-            child: Image.network(
-              item['image']!,
-              height: 100,
-              width: 100,
-              fit: BoxFit.cover,
-              loadingBuilder: (context, child, progress) {
-                if (progress == null) return child;
-                return const SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              },
-
-              errorBuilder:
-                  (context, error, stackTrace) => const SizedBox(
+          GestureDetector(
+            //Ao tocar no card, abre os detalhes
+            onTap: () {
+              showDialog(
+                context: controller.context,
+                builder: (BuildContext context) {
+                  return detalhesPersonagem(item);
+                },
+              );
+              // SHOW DIALOG
+            },
+            child: ClipRRect(
+              //Deixa a imagem arredondada
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(15),
+                bottomLeft: Radius.circular(15),
+              ),
+              child: Image.network(
+                item.image,
+                height: 100,
+                width: 100,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, progress) {
+                  if (progress == null) return child;
+                  return const SizedBox(
                     height: 100,
                     width: 100,
-                    child: Icon(Icons.error),
-                  ),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                },
+              ),
             ),
           ),
-          const SizedBox(width: 15),
-
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item['name']!,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+            //Expandir para a linha toda
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.name,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                ),
-                const SizedBox(width: 5),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.circle,
-                      size: 12,
-                      color:
-                          item['status'] == 'alive' ? Colors.green : Colors.red,
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      '${item['status']} - ${item['species']} (${item['gender']})',
-                    ),
-                    if (item.type.isNotEmpty) Text('Tipo: ${item.type}'),
-                  ],
-                ),
-              ],
+                  const SizedBox(height: 5),
+                  Text(item.status, style: TextStyle(fontSize: 14)),
+                ],
+              ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget detalhesPersonagem(PersonagemModel item) {
+    return AlertDialog(
+      //Caixa de texto que irá aparecer na tela ao clicar no card
+      content: Container(
+        height: orientacao == Orientation.portrait ? 400 : 350,
+        width: orientacao == Orientation.portrait ? 275 : 225,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
+        padding: EdgeInsets.only(left: 10, top: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  width: 150,
+                  height: 150,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text('Nome: Rick', style: TextStyle(fontSize: 23)),
+            Text('Status: vivo', style: TextStyle(fontSize: 23)),
+            Text('Espécie: humano', style: TextStyle(fontSize: 23)),
+            Text('Gênero: masculino', style: TextStyle(fontSize: 23)),
+            Text('Tipo: ', style: TextStyle(fontSize: 23)),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(onPressed: () => Get.back(), child: const Text('Fechar')),
+      ],
     );
   }
 }

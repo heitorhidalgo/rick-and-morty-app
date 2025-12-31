@@ -1,4 +1,5 @@
 class PersonagemModel {
+  //atributos
   final int id;
   final String name;
   final String status;
@@ -8,6 +9,7 @@ class PersonagemModel {
   final String gender;
 
   PersonagemModel({
+    //construtores
     required this.id,
     required this.name,
     required this.status,
@@ -18,6 +20,7 @@ class PersonagemModel {
   });
 
   factory PersonagemModel.fromJson(Map<String, dynamic> json) {
+    //Dados que chegam da api
     return PersonagemModel(
       id: json['id'] ?? 0,
       name: json['name'] ?? '',
