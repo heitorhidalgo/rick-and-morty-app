@@ -32,7 +32,7 @@ mixin class PersonagemComponent {
           Expanded(
             child: Obx(() {
               //Deixando observável com o GetX
-              //Carregando a lista
+              //loading inicial
               if (controller.isLoading.value) {
                 return const Center(
                   child: CircularProgressIndicator(color: Colors.green),
@@ -46,10 +46,21 @@ mixin class PersonagemComponent {
               }
               //Mostra a lista no caso de sucesso
               return ListView.builder(
+                //conexão com o sensor
+                controller: controller.scrollController,
                 physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.only(bottom: 20),
-                itemCount: controller.personagens.length,
+                itemCount:
+                    controller.personagens.length +
+                    1, //lista tem o tamanho dos personagens + 1 (para o loading do fim)
                 itemBuilder: (context, index) {
+                  //lógica do fim da lista
+                  if (index == controller.personagens.length) {
+                    return const Padding(
+                      padding: EdgeInsets.all(15),
+                      child: Center(),
+                    );
+                  }
                   final item = controller.personagens[index];
                   return cardPersonagem(item);
                 },
