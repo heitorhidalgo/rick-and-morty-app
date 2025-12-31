@@ -27,7 +27,7 @@ mixin class PersonagemComponent {
             'Personagens',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 30),
 
           Expanded(
             child: Obx(() {
@@ -152,34 +152,44 @@ mixin class PersonagemComponent {
     return AlertDialog(
       //Caixa de texto que irá aparecer na tela ao clicar no card
       content: Container(
-        height: orientacao == Orientation.portrait ? 400 : 350,
+        height: orientacao == Orientation.portrait ? 500 : 350,
         width: orientacao == Orientation.portrait ? 275 : 225,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
         padding: EdgeInsets.only(left: 10, top: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 40),
             Center(
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(50),
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  width: 150,
-                  height: 150,
-                ),
+                borderRadius: BorderRadius.circular(25),
+                child: Image.network(item.image, width: 150, height: 150),
               ),
             ),
+            const SizedBox(height: 30),
+            Text(
+              'Nome: ${item.name}',
+              style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 10),
-            Text('Nome: Rick', style: TextStyle(fontSize: 23)),
-            Text('Status: vivo', style: TextStyle(fontSize: 23)),
-            Text('Espécie: humano', style: TextStyle(fontSize: 23)),
-            Text('Gênero: masculino', style: TextStyle(fontSize: 23)),
-            Text('Tipo: ', style: TextStyle(fontSize: 23)),
+            Text('Status: ${item.status}', style: TextStyle(fontSize: 23)),
+            const SizedBox(height: 5),
+            Text('Espécie: ${item.species}', style: TextStyle(fontSize: 23)),
+            const SizedBox(height: 5),
+            Text('Gênero: ${item.gender}', style: TextStyle(fontSize: 23)),
+            const SizedBox(height: 5),
+            if (item.type.isEmpty)
+              Text('Tipo: unknown', style: TextStyle(fontSize: 23))
+            else
+              Text('Tipo: ${item.type}', style: TextStyle(fontSize: 23)),
           ],
         ),
       ),
       actions: [
-        TextButton(onPressed: () => Get.back(), child: const Text('Fechar')),
+        TextButton(
+          onPressed: () => Get.back(),
+          child: const Text('Fechar', style: TextStyle(fontSize: 20)),
+        ),
       ],
     );
   }
