@@ -4,20 +4,5 @@
 - MODO CLARO E ESCURO;
 - RESPONSIVIDADE PORTRAIT E LANDSCAPE;
 - EXIBIR LISTAGEM DE PERSONAGEM (NOME + STATUS (VIVO OU MORTO));
-- AO TOCAR NO CARD EXIBIR OS DETALHESDO PERSONAGEM (NOME + STATUS + ESPECIE + GENERO + TIPO);
-
-
-CLASSE MODEL
-
-int id,
-String name,
-String status,
-String species,
-required String image,
-required String type,
-required String gender
-
-
-OBS: PODE USAR IA APENAS PARA MONTAR A LISTA E A CLASSE MODELAGEM DOS PERSONAGENS.
-
-[link API](https://rickandmortyapi.com/)
+- AO TOCAR NO CARD EXIBIR OS DETALHES DO PERSONAGEM (NOME + STATUS + ESPECIE + GENERO + TIPO);
+- [link API](https://rickandmortyapi.com/)
