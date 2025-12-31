@@ -31,36 +31,50 @@ mixin class PersonagemComponent {
 
           Expanded(
             child: Obx(() {
-              //Deixando observável com o GetX
-              //loading inicial
+              // Deixando observável com o GetX
+
+              // 1. Loading inicial (tela toda)
               if (controller.isLoading.value) {
                 return const Center(
                   child: CircularProgressIndicator(color: Colors.green),
                 );
               }
-              //Quando a lista estiver vazia
+
+              // 2. Quando a lista estiver vazia
               if (controller.personagens.isEmpty) {
                 return const Center(
                   child: Text('Nenhum personagem encontrado'),
                 );
               }
-              //Mostra a lista no caso de sucesso
+
+              // 3. Mostra a lista no caso de sucesso
               return ListView.builder(
-                //conexão com o sensor
+                // Conexão com o sensor de scroll
                 controller: controller.scrollController,
                 physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.only(bottom: 20),
-                itemCount:
-                    controller.personagens.length +
-                    1, //lista tem o tamanho dos personagens + 1 (para o loading do fim)
+                // Lista tem o tamanho dos personagens + 1 (para o loading do fim)
+                itemCount: controller.personagens.length + 1,
                 itemBuilder: (context, index) {
-                  //lógica do fim da lista
+                  // LÓGICA DO FIM DA LISTA (O ITEM EXTRA)
                   if (index == controller.personagens.length) {
-                    return const Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Center(),
-                    );
+                    // Usamos Obx aqui para o loading de baixo ser reativo
+                    return Obx(() {
+                      if (controller.isLoadMore.value) {
+                        return const Padding(
+                          padding: EdgeInsets.all(15),
+                          child: Center(
+                            child: CircularProgressIndicator(color: Colors.green),
+                          ),
+                        );
+                      } else {
+                        // Caso não estiver carregando, aparece um espaço vazio
+                        return const SizedBox(height: 20);
+                      }
+                    });
                   }
+
+                  // Lógica do card normal (se não for o fim da lista)
                   final item = controller.personagens[index];
                   return cardPersonagem(item);
                 },
@@ -76,7 +90,7 @@ mixin class PersonagemComponent {
     return Center(
       heightFactor: 1,
       child: Image.asset(
-        //Sempre que colocar alguma imagem, ir no pubspec.yaml e alterar o assets, colocando o caminho correto
+        // Sempre que colocar alguma imagem, ir no pubspec.yaml e alterar o assets
         'assets/images/logo.png',
         width: orientacao == Orientation.portrait ? 300 : 180,
         height: orientacao == Orientation.portrait ? 300 : 180,
@@ -84,7 +98,7 @@ mixin class PersonagemComponent {
     );
   }
 
-  //Widget para alterar tema, criado junto com a theme_controller
+  // Widget para alterar tema
   Widget mudarTema() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -105,7 +119,7 @@ mixin class PersonagemComponent {
       child: Row(
         children: [
           GestureDetector(
-            //Ao tocar no card, abre os detalhes
+            // Ao tocar no card, abre os detalhes
             onTap: () {
               showDialog(
                 context: controller.context,
@@ -113,10 +127,9 @@ mixin class PersonagemComponent {
                   return detalhesPersonagem(item);
                 },
               );
-              // SHOW DIALOG
             },
             child: ClipRRect(
-              //Deixa a imagem arredondada
+              // Deixa a imagem arredondada
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(15),
                 bottomLeft: Radius.circular(15),
@@ -138,7 +151,7 @@ mixin class PersonagemComponent {
             ),
           ),
           Expanded(
-            //Expandir para a linha toda
+            // Expandir para a linha toda
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: Column(
@@ -146,10 +159,11 @@ mixin class PersonagemComponent {
                 children: [
                   Text(
                     item.name,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 5),
-                  Text(item.status, style: TextStyle(fontSize: 14)),
+                  Text(item.status, style: const TextStyle(fontSize: 14)),
                 ],
               ),
             ),
@@ -161,16 +175,17 @@ mixin class PersonagemComponent {
 
   Widget detalhesPersonagem(PersonagemModel item) {
     return AlertDialog(
-      //Caixa de texto que irá aparecer na tela ao clicar no card
+      // Caixa de texto que irá aparecer na tela ao clicar no card
       content: Container(
-        height: orientacao == Orientation.portrait ? 500 : 350,
+        // Removi a altura fixa do container para evitar erro de pixel overflow
         width: orientacao == Orientation.portrait ? 275 : 225,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
-        padding: EdgeInsets.only(left: 10, top: 10),
+        padding: const EdgeInsets.only(left: 10, top: 10),
         child: Column(
+          mainAxisSize: MainAxisSize.min, // Ajusta altura ao conteúdo
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
             Center(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(25),
@@ -180,19 +195,23 @@ mixin class PersonagemComponent {
             const SizedBox(height: 30),
             Text(
               'Nome: ${item.name}',
-              style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            Text('Status: ${item.status}', style: TextStyle(fontSize: 23)),
+            Text('Status: ${item.status}',
+                style: const TextStyle(fontSize: 23)),
             const SizedBox(height: 5),
-            Text('Espécie: ${item.species}', style: TextStyle(fontSize: 23)),
+            Text('Espécie: ${item.species}',
+                style: const TextStyle(fontSize: 23)),
             const SizedBox(height: 5),
-            Text('Gênero: ${item.gender}', style: TextStyle(fontSize: 23)),
+            Text('Gênero: ${item.gender}',
+                style: const TextStyle(fontSize: 23)),
             const SizedBox(height: 5),
             if (item.type.isEmpty)
-              Text('Tipo: unknown', style: TextStyle(fontSize: 23))
+              const Text('Tipo: unknown', style: TextStyle(fontSize: 23))
             else
-              Text('Tipo: ${item.type}', style: TextStyle(fontSize: 23)),
+              Text('Tipo: ${item.type}',
+                  style: const TextStyle(fontSize: 23)),
           ],
         ),
       ),
