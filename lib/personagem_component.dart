@@ -5,10 +5,13 @@ import 'package:rick_morty_app/personagem_model.dart';
 import 'package:rick_morty_app/theme_controller.dart';
 
 mixin class PersonagemComponent {
-  final PersonagemController controller = Get.put(PersonagemController());
-  PersonagemModel? personagem;
+  final PersonagemController controller = Get.put(
+    PersonagemController(),
+  ); // injeção de dependência com o GetX
+  PersonagemModel? personagem; // o ? diz que a variável pode ser nula
 
-  late Orientation orientacao;
+  late Orientation
+  orientacao; //variável para verificar se a orientação do celular é portrait(vertical) ou landscape(horizontal)
 
   initialize(BuildContext context) async {
     controller.context = context;
@@ -64,7 +67,9 @@ mixin class PersonagemComponent {
                         return const Padding(
                           padding: EdgeInsets.all(15),
                           child: Center(
-                            child: CircularProgressIndicator(color: Colors.green),
+                            child: CircularProgressIndicator(
+                              color: Colors.green,
+                            ),
                           ),
                         );
                       } else {
@@ -129,7 +134,7 @@ mixin class PersonagemComponent {
               );
             },
             child: ClipRRect(
-              // Deixa a imagem arredondada
+              // Deixa a imagem arredondada, apenas na parte superior e inferior da esquerda
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(15),
                 bottomLeft: Radius.circular(15),
@@ -160,7 +165,9 @@ mixin class PersonagemComponent {
                   Text(
                     item.name,
                     style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 5),
                   Text(item.status, style: const TextStyle(fontSize: 14)),
@@ -177,7 +184,6 @@ mixin class PersonagemComponent {
     return AlertDialog(
       // Caixa de texto que irá aparecer na tela ao clicar no card
       content: Container(
-        // Removi a altura fixa do container para evitar erro de pixel overflow
         width: orientacao == Orientation.portrait ? 275 : 225,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
         padding: const EdgeInsets.only(left: 10, top: 10),
@@ -198,20 +204,25 @@ mixin class PersonagemComponent {
               style: const TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            Text('Status: ${item.status}',
-                style: const TextStyle(fontSize: 23)),
+            Text(
+              'Status: ${item.status}',
+              style: const TextStyle(fontSize: 23),
+            ),
             const SizedBox(height: 5),
-            Text('Espécie: ${item.species}',
-                style: const TextStyle(fontSize: 23)),
+            Text(
+              'Espécie: ${item.species}',
+              style: const TextStyle(fontSize: 23),
+            ),
             const SizedBox(height: 5),
-            Text('Gênero: ${item.gender}',
-                style: const TextStyle(fontSize: 23)),
+            Text(
+              'Gênero: ${item.gender}',
+              style: const TextStyle(fontSize: 23),
+            ),
             const SizedBox(height: 5),
             if (item.type.isEmpty)
               const Text('Tipo: unknown', style: TextStyle(fontSize: 23))
             else
-              Text('Tipo: ${item.type}',
-                  style: const TextStyle(fontSize: 23)),
+              Text('Tipo: ${item.type}', style: const TextStyle(fontSize: 23)),
           ],
         ),
       ),

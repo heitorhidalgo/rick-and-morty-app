@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart'; // Importante para usar GetMaterialApp
 import 'package:get_storage/get_storage.dart'; // Para salvar dados locais (Tema)
 import 'package:rick_morty_app/theme_controller.dart';
+
 import 'home_page.dart';
 
 // A função main agora é assíncrona (async) porque precisa esperar o banco de dados iniciar
@@ -26,7 +27,6 @@ class MyApp extends StatelessWidget {
     // - Snackbars e Dialogs simplificados
     return GetMaterialApp(
       title: 'Rick and Morty App', // Boa prática: Nome do App
-
       // --- CONFIGURAÇÃO DE TEMAS ---
 
       // Define qual modo usar (Claro, Escuro ou Sistema) baseado no que está salvo

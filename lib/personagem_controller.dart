@@ -1,8 +1,9 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:rick_morty_app/personagem_model.dart'; // Verifique se o caminho está certo
+import 'package:rick_morty_app/personagem_model.dart';
 
 class PersonagemController extends GetxController {
   late BuildContext context;
@@ -31,7 +32,6 @@ class PersonagemController extends GetxController {
       // Se a posição atual for igual ou quase igual a posição máxima (perto do fim)
       if (scrollController.position.pixels >=
           scrollController.position.maxScrollExtent - 50) {
-
         // E se não estiver carregando nada agora...
         if (!isLoadMore.value && !isLoading.value) {
           carregarMaisPersonagens();
@@ -69,7 +69,9 @@ class PersonagemController extends GetxController {
       currentPage++; // Vai para a próxima pg
 
       final response = await http.get(
-          Uri.parse('https://rickandmortyapi.com/api/character?page=$currentPage')
+        Uri.parse(
+          'https://rickandmortyapi.com/api/character?page=$currentPage',
+        ),
       );
 
       if (response.statusCode == 200) {
@@ -78,7 +80,7 @@ class PersonagemController extends GetxController {
 
         // Uso do addAll para somar na lista existente
         personagens.addAll(
-            novosItens.map((e) => PersonagemModel.fromJson(e)).toList()
+          novosItens.map((e) => PersonagemModel.fromJson(e)).toList(),
         );
       }
     } catch (e) {
@@ -91,7 +93,8 @@ class PersonagemController extends GetxController {
 
   @override
   void onClose() {
-    scrollController.dispose(); // Boa prática: sempre fechar o controller ao sair
+    scrollController
+        .dispose(); // Boa prática: sempre fechar o controller ao sair
     super.onClose();
   }
 }
