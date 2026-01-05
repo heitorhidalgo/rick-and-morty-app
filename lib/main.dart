@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart'; // Importante para usar GetMaterialApp
 import 'package:get_storage/get_storage.dart'; // Para salvar dados locais (Tema)
-import 'package:rick_morty_app/theme_controller.dart';
+import 'package:rick_morty_app/theme/theme_controller.dart';
 
-import 'home_page.dart';
+import 'personagem/personagem_page.dart';
 
 // A função main agora é assíncrona (async) porque precisa esperar o banco de dados iniciar
 void main() async {

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:rick_morty_app/personagem_model.dart';
+import 'package:rick_morty_app/models/personagem_model.dart';
 
 class PersonagemController extends GetxController {
   late BuildContext context;

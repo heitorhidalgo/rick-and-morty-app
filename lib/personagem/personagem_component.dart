@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rick_morty_app/personagem_controller.dart';
-import 'package:rick_morty_app/personagem_model.dart';
-import 'package:rick_morty_app/theme_controller.dart';
+import 'package:rick_morty_app/models/personagem_model.dart';
+import 'package:rick_morty_app/personagem/personagem_controller.dart';
+import 'package:rick_morty_app/theme/theme_controller.dart';
 
 mixin class PersonagemComponent {
   final PersonagemController controller = Get.put(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rick_morty_app/personagem_component.dart';
+import 'package:rick_morty_app/personagem/personagem_component.dart';
 
 // Classe principal da página
 class HomePage extends StatefulWidget {
@@ -13,7 +13,6 @@ class HomePage extends StatefulWidget {
 // Classe de Estado (Onde a tela é desenhada)
 // O 'with PersonagemComponent' injeta o código de design aqui
 class _HomePageState extends State<HomePage> with PersonagemComponent {
-
   @override
   Widget build(BuildContext context) {
     // Chama a função do Mixin que configura o contexto e a orientação (retrato/paisagem)
