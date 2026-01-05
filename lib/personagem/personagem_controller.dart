@@ -9,15 +9,15 @@ class PersonagemController extends GetxController {
   late BuildContext context;
 
   // CONTROLES DE ESTADO
-  final isLoading = true.obs; // Carregamento inicial (tela toda)
+  RxBool isLoading = true.obs; // Carregamento inicial (tela toda)
 
   //Deve começar como false, senão o loading aparece sem scrollar
-  final isLoadMore = false.obs;
+  RxBool isLoadMore = false.obs;
 
-  final scrollController = ScrollController(); // Sensor de rolagem
+  ScrollController scrollController = ScrollController(); // Sensor de rolagem
 
   // DADOS
-  final personagens = <PersonagemModel>[].obs;
+  RxList personagens = <PersonagemModel>[].obs;
   int currentPage = 1; // Começamos na pg 1
 
   @override
