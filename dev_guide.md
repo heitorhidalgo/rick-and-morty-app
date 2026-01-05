@@ -22,11 +22,11 @@ dependencies:
 
 ```text
 lib/
-├── personagem_component     # Widgets reutilizáveis (Card, Botões)
-├── personagem_controller    # Lógica de negócios (GetxController)
-├── personagem_model         # Moldes dos dados (Classes)
-├── home_page                # Telas visuais (Scaffolds)
-├── theme_controller.dart    # Lógica de temas
+├── widgets                 # Widgets reutilizáveis (Card, Botões)
+├── controllers             # Lógica de negócios (GetxController)
+├── models                  # Moldes dos dados (Classes)
+├── pages                   # Telas visuais (Scaffolds)
+├── themes                  # Lógica de temas
 └── main.dart
 ```
 ## 📱 2. Page (A Tela Estática)
